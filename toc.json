@@ -1,0 +1,316 @@
+{
+  "collapseTableOfContents": false,
+  "items": [
+    {
+      "type": "divider",
+      "title": "APIS"
+    },
+    {
+      "type": "group",
+      "title": "API Catalog",
+      "uri": "/API Catalog.yml",
+      "items": [
+        {
+          "type": "group",
+          "title": "API",
+          "items": [
+            {
+              "type": "item",
+              "title": "Get API list",
+              "uri": "/API Catalog.yml/paths/~1apis/get"
+            },
+            {
+              "type": "item",
+              "title": "Create an API",
+              "uri": "/API Catalog.yml/paths/~1apis/post"
+            },
+            {
+              "type": "item",
+              "title": "Get an API",
+              "uri": "/API Catalog.yml/paths/~1apis~1{unique-key}/get"
+            },
+            {
+              "type": "item",
+              "title": "Update an API",
+              "uri": "/API Catalog.yml/paths/~1apis~1{unique-key}/patch"
+            },
+            {
+              "type": "item",
+              "title": "Hard delete a draft API",
+              "uri": "/API Catalog.yml/paths/~1apis~1{unique-key}/delete"
+            },
+            {
+              "type": "item",
+              "title": "Delete a KPI for an API",
+              "uri": "/API Catalog.yml/paths/~1apis~1{unique-key}~1kpis~1{kpi-id}/delete"
+            },
+            {
+              "type": "item",
+              "title": "Delete future goal for an API",
+              "uri": "/API Catalog.yml/paths/~1apis~1{unique-key}~1future-goals~1{goal-id}/delete"
+            },
+            {
+              "type": "item",
+              "title": "Delete capability for an API",
+              "uri": "/API Catalog.yml/paths/~1apis~1{unique-key}~1capabilities~1{asset-id}/delete"
+            },
+            {
+              "type": "item",
+              "title": "Replace a stakeholder's API rating",
+              "uri": "/API Catalog.yml/paths/~1apis~1{unique-key}~1ratings/put"
+            },
+            {
+              "type": "item",
+              "title": "Delete a stakeholder's API rating",
+              "uri": "/API Catalog.yml/paths/~1apis~1{unique-key}~1ratings/delete"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "title": "Exception",
+          "items": [
+            {
+              "type": "item",
+              "title": "Get exception list",
+              "uri": "/API Catalog.yml/paths/~1exceptions/get"
+            },
+            {
+              "type": "item",
+              "title": "Create an exception",
+              "uri": "/API Catalog.yml/paths/~1exceptions/post"
+            },
+            {
+              "type": "item",
+              "title": "Get an exception",
+              "uri": "/API Catalog.yml/paths/~1exceptions~1{unique-key}/get"
+            },
+            {
+              "type": "item",
+              "title": "Update an exception",
+              "uri": "/API Catalog.yml/paths/~1exceptions~1{unique-key}/patch"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "title": "Proxy",
+          "items": [
+            {
+              "type": "item",
+              "title": "Get proxy list",
+              "uri": "/API Catalog.yml/paths/~1proxies/get"
+            },
+            {
+              "type": "item",
+              "title": "Create a proxy",
+              "uri": "/API Catalog.yml/paths/~1proxies/post"
+            },
+            {
+              "type": "item",
+              "title": "Get a proxy",
+              "uri": "/API Catalog.yml/paths/~1proxies~1{unique-key}/get"
+            },
+            {
+              "type": "item",
+              "title": "Update a proxy",
+              "uri": "/API Catalog.yml/paths/~1proxies~1{unique-key}/patch"
+            },
+            {
+              "type": "item",
+              "title": "Hard delete a draft proxy",
+              "uri": "/API Catalog.yml/paths/~1proxies~1{unique-key}/delete"
+            },
+            {
+              "type": "item",
+              "title": "Delete build quality for a proxy",
+              "uri": "/API Catalog.yml/paths/~1proxies~1{unique-key}~1build-qualities~1{quality-id}/delete"
+            },
+            {
+              "type": "item",
+              "title": "Delete a proxy provider for a proxy",
+              "uri": "/API Catalog.yml/paths/~1proxies~1{unique-key}~1proxy-providers~1{asset-id}/delete"
+            },
+            {
+              "type": "item",
+              "title": "Get proxy subscriptions for an organization",
+              "uri": "/API Catalog.yml/paths/~1{seapim-org}~1proxies~1{unique-key}~1subscriptions/get"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "title": "Reference",
+          "items": [
+            {
+              "type": "item",
+              "title": "Get capability list",
+              "uri": "/API Catalog.yml/paths/~1capabilities/get"
+            },
+            {
+              "type": "item",
+              "title": "Get set of values for a value type",
+              "uri": "/API Catalog.yml/paths/~1values~1{type}/get"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "title": "Stakeholder",
+          "items": [
+            {
+              "type": "item",
+              "title": "Create a stakeholder",
+              "uri": "/API Catalog.yml/paths/~1stakeholders/post"
+            },
+            {
+              "type": "item",
+              "title": "Get stakeholder list",
+              "uri": "/API Catalog.yml/paths/~1stakeholders/get"
+            },
+            {
+              "type": "item",
+              "title": "Get a stakeholder",
+              "uri": "/API Catalog.yml/paths/~1stakeholders~1{unique-key}/get"
+            },
+            {
+              "type": "item",
+              "title": "Update a stakeholder",
+              "uri": "/API Catalog.yml/paths/~1stakeholders~1{unique-key}/patch"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "title": "Version",
+          "items": [
+            {
+              "type": "item",
+              "title": "Get version list",
+              "uri": "/API Catalog.yml/paths/~1versions/get"
+            },
+            {
+              "type": "item",
+              "title": "Create a version",
+              "uri": "/API Catalog.yml/paths/~1versions/post"
+            },
+            {
+              "type": "item",
+              "title": "Get a version",
+              "uri": "/API Catalog.yml/paths/~1versions~1{version-unique-key}/get"
+            },
+            {
+              "type": "item",
+              "title": "Update a version or convert from draft",
+              "uri": "/API Catalog.yml/paths/~1versions~1{version-unique-key}/patch"
+            },
+            {
+              "type": "item",
+              "title": "Hard delete a draft version",
+              "uri": "/API Catalog.yml/paths/~1versions~1{version-unique-key}/delete"
+            },
+            {
+              "type": "item",
+              "title": "Delete document quality for a version",
+              "uri": "/API Catalog.yml/paths/~1versions~1{version-unique-key}~1document-qualities~1{quality-id}/delete"
+            },
+            {
+              "type": "item",
+              "title": "Replace a version's certification",
+              "uri": "/API Catalog.yml/paths/~1versions~1{version-unique-key}~1apis~1{name}~1certifications/put"
+            },
+            {
+              "type": "item",
+              "title": "Delete a version's certification",
+              "uri": "/API Catalog.yml/paths/~1versions~1{version-unique-key}~1apis~1{name}~1certifications/delete"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "title": "Notification",
+          "items": [
+            {
+              "type": "item",
+              "title": "Get notification list",
+              "uri": "/API Catalog.yml/paths/~1notifications/get"
+            },
+            {
+              "type": "item",
+              "title": "Create a notification",
+              "uri": "/API Catalog.yml/paths/~1notifications/post"
+            },
+            {
+              "type": "item",
+              "title": "Replace a notification",
+              "uri": "/API Catalog.yml/paths/~1notifications~1{id}/put"
+            },
+            {
+              "type": "item",
+              "title": "Delete a notification",
+              "uri": "/API Catalog.yml/paths/~1notifications~1{id}/delete"
+            },
+            {
+              "type": "item",
+              "title": "Replace my read notification",
+              "uri": "/API Catalog.yml/paths/~1read-notifications/put"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "title": "Consumer",
+          "items": [
+            {
+              "type": "item",
+              "title": "Get consumer list for an organization",
+              "uri": "/API Catalog.yml/paths/~1{seapim-org}~1consumers/get"
+            },
+            {
+              "type": "item",
+              "title": "Hard delete all consumers for an organization",
+              "uri": "/API Catalog.yml/paths/~1{seapim-org}~1consumers/delete"
+            },
+            {
+              "type": "item",
+              "title": "Get a consumer for an organization.",
+              "uri": "/API Catalog.yml/paths/~1{seapim-org}~1consumers~1{unique-key}/get"
+            },
+            {
+              "type": "item",
+              "title": "Replace a consumer for an organization",
+              "uri": "/API Catalog.yml/paths/~1{seapim-org}~1consumers~1{unique-key}/put"
+            },
+            {
+              "type": "item",
+              "title": "Hard delete a consumer for an organization",
+              "uri": "/API Catalog.yml/paths/~1{seapim-org}~1consumers~1{unique-key}/delete"
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "title": "Product",
+          "items": [
+            {
+              "type": "item",
+              "title": "Get product list or an organization",
+              "uri": "/API Catalog.yml/paths/~1{seapim-org}~1products/get"
+            },
+            {
+              "type": "item",
+              "title": "Get a product for an organization.",
+              "uri": "/API Catalog.yml/paths/~1{seapim-org}~1products~1{unique-key}/get"
+            },
+            {
+              "type": "item",
+              "title": "Replace a product for an organization",
+              "uri": "/API Catalog.yml/paths/~1{seapim-org}~1products~1{unique-key}/put"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "version": 2
+}

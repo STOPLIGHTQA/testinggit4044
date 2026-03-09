@@ -1,0 +1,1063 @@
+extends: 'spectral:oas'
+rules:
+  se_must_not_use_oas_3_1:
+    recommended: true
+    given: $
+    type: style
+    formats:
+      - oas3
+    then:
+      field: openapi
+      function: pattern
+      functionOptions:
+        notMatch: '3\.1\.[\d]'
+    description: OpenAPI version must be 3.0.x
+  se_host_must_not_contain_underscore:
+    recommended: true
+    given: $
+    type: style
+    then:
+      field: host
+      function: pattern
+      functionOptions:
+        notMatch: _
+    description: Host must use hyphens (-) instead of underscore (_)
+  se_host_must_be_lowercase:
+    recommended: true
+    given: $
+    type: style
+    then:
+      field: host
+      function: pattern
+      functionOptions:
+        match: '^[^A-Z]*$'
+    description: 'API Host must be all lowercase '
+    severity: warn
+  se_host_must_not_contain_fileextension:
+    recommended: true
+    given: $
+    type: style
+    then:
+      field: host
+      function: pattern
+      functionOptions:
+        notMatch: (JSON|json|XML|xml)
+    description: The API Host cannot contain file extensions
+  se_basepath_must_not_contain_underscore:
+    recommended: true
+    given: $
+    type: style
+    then:
+      field: basePath
+      function: pattern
+      functionOptions:
+        notMatch: _
+    description: Basepath must use hyphens (-) instead of underscore (_)
+    severity: warn
+  se_basepath_must_be_lowercase:
+    recommended: true
+    given: $
+    type: style
+    then:
+      field: basePath
+      function: pattern
+      functionOptions:
+        match: '^[^A-Z]*$'
+    description: The basepath must be in all lowercase
+    severity: warn
+  se_basepath_must_not_contain_fileextension:
+    recommended: true
+    given: $
+    type: style
+    then:
+      field: basePath
+      function: pattern
+      functionOptions:
+        notMatch: (JSON|json|XML|xml)
+    description: File extensions must not be in the basepath
+  se_basepath_must_contain_version_number:
+    recommended: true
+    given: $
+    type: style
+    then:
+      field: basePath
+      function: pattern
+      functionOptions:
+        match: '^(/v[1-9])'
+    description: The version number must be at the start of the basepath
+    severity: warn
+  se_basepath_must_contain_major_version_number_only:
+    recommended: true
+    given: $
+    type: style
+    then:
+      field: basePath
+      function: pattern
+      functionOptions:
+        notMatch: \.
+    description: Basepath must contain only major version
+    severity: warn
+  se_path_name_must_not_contain_underscore:
+    recommended: true
+    description: Path name must not contain underscores
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: _
+  se_path_params_must_not_contain_underscore:
+    recommended: true
+    description: Path parameters must not contain underscores
+    type: style
+    given: '$.paths[*].parameters[*]'
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        notMatch: _
+  se_path_params_must_be_lowercase:
+    recommended: true
+    description: Path parameters must be lowercase
+    type: style
+    given: '$.paths[*].parameters[*]'
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        match: '^[^A-Z]*$'
+  se_path_must_be_lowercase:
+    recommended: true
+    description: Path must be lowercase
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        match: '^[^A-Z]*$'
+    severity: warn
+  se_path_name_must_not_contain_fileextension:
+    recommended: true
+    description: Path name must not contain file extension
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: (JSON|json|XML|xml)
+  se_path_name_must_not_contain_version_number:
+    recommended: true
+    description: Path name must not contain version number
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: '(/v[1-9]|/version[1-9])'
+  se_query_params_must_not_contain_underscore:
+    recommended: true
+    description: Query parameters must not contain underscores
+    type: style
+    given: '$..parameters[?(@ && @.in=="query")]'
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        notMatch: _
+  se_query_params_must_not_contain_space:
+    recommended: true
+    description: Query parameters must not contain spaces
+    type: style
+    given: '$..parameters[?(@ && @.in=="query")]'
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        notMatch: ' '
+  se_query_params_must_be_lowercase:
+    recommended: true
+    description: Query parameters must be lowercase
+    type: style
+    given: '$..parameters[?(@ && @.in=="query")]'
+    then:
+      field: name
+      function: pattern
+      functionOptions:
+        match: '^[^A-Z]*$'
+  se_model_properties_must_not_contain_underscore:
+    recommended: true
+    description: Model properties must not contain underscores. Use lower camelCase.
+    type: style
+    given: '$.definitions[*].properties'
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: _
+  se_model_properties_must_not_contain_dashes:
+    recommended: true
+    description: Model properties must not contain dashes. Use lower camelCase.
+    type: style
+    given: '$.definitions[*].properties'
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: '-'
+    severity: warn
+  se_model_properties_must_not_contain_spaces:
+    recommended: true
+    description: Model properties must not contain spaces. Use lower camelCase.
+    type: style
+    given: '$.definitions[*].properties'
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ' '
+    severity: warn
+  se_model_properties_must_not_contain_underscore1:
+    recommended: true
+    description: Model properties must not contain underscores. Use lower camelCase.
+    type: style
+    given: '$.definitions[*].properties[*].properties'
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: _
+  se_model_properties_must_not_contain_dashes1:
+    recommended: true
+    description: Model properties must not contain dashes. Use lower camelCase.
+    type: style
+    given: '$.definitions[*].properties[*].properties'
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: '-'
+    severity: warn
+  se_model_properties_must_not_contain_spaces1:
+    recommended: true
+    description: Model properties must not contain spaces. Use lower camelCase.
+    type: style
+    given: '$.definitions[*].properties[*].properties'
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ' '
+    severity: warn
+  se_model_properties_must_not_contain_underscore2:
+    recommended: true
+    description: Model properties must not contain underscores. Use lower camelCase.
+    type: style
+    given: '$.definitions[*].properties[*].properties[*].properties'
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: _
+  se_model_properties_must_not_contain_dashes2:
+    recommended: true
+    description: Model properties must not contain dashes. Use lower camelCase.
+    type: style
+    given: '$.definitions[*].properties[*].properties[*].properties'
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: '-'
+    severity: warn
+  se_model_properties_must_not_contain_spaces2:
+    recommended: true
+    description: Model properties must not contain spaces. Use lower camelCase.
+    type: style
+    given: '$.definitions[*].properties[*].properties[*].properties'
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ' '
+    severity: warn
+  se_model_properties_must_be_lower_camelCase:
+    recommended: true
+    description: Model properties must be lower camelCase or all small letters.
+    type: style
+    given: '$.definitions[*].properties'
+    then:
+      field: '@key'
+      function: casing
+      functionOptions:
+        type: camel
+    severity: warn
+  se_model_properties_must_be_lower_camelCase1:
+    recommended: true
+    description: Model properties must be lower camelCase or all small letters.
+    type: style
+    given: '$.definitions[*].properties[*].properties'
+    then:
+      field: '@key'
+      function: casing
+      functionOptions:
+        type: camel
+    severity: warn
+  se_model_properties_must_be_lower_camelCase2:
+    recommended: true
+    description: Model properties must be lower camelCase or all small letters.
+    type: style
+    given: '$.definitions[*].properties[*].properties[*].properties'
+    then:
+      field: '@key'
+      function: casing
+      functionOptions:
+        type: camel
+    severity: warn
+  se_oas2_request_or_response_body_properties_must_be_lower_camelCase:
+    recommended: true
+    description: Request or Response Body properties must be lower camelCase or all small letters.
+    type: style
+    formats:
+      - oas2
+    given: '$..parameters[*].schema.properties'
+    then:
+      field: '@key'
+      function: casing
+      functionOptions:
+        type: camel
+  se_oas3_request_body_properties_must_be_lower_camelCase:
+    recommended: true
+    description: Request Body properties must be lower camelCase or all small letters.
+    message: '{{property}} must be camelCase'
+    type: style
+    formats:
+      - oas3
+    given: $.paths.*.*.requestBody.content.*.schema.properties
+    then:
+      field: '@key'
+      function: casing
+      functionOptions:
+        type: camel
+  se_oas3_response_body_properties_must_be_lower_camelCase:
+    recommended: true
+    description: Response Body properties must be lower camelCase or all small letters.
+    type: style
+    formats:
+      - oas3
+    given: $.paths.*.*.responses.*.content.*.schema.properties
+    then:
+      field: '@key'
+      function: casing
+      functionOptions:
+        type: camel
+  se_request_or_response_body_properties_must_not_contain_spaces:
+    recommended: true
+    description: Request or Response Body properties must not contain spaces.
+    type: style
+    given: '$..parameters[*].schema.properties'
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: ' '
+  se_request_or_response_body_properties_must_not_contain_dashes:
+    recommended: true
+    description: Request or Response Body properties must not contain dashes.
+    type: style
+    given: '$..parameters[*].schema.properties'
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: '-'
+  se_request_or_response_body_properties_must_not_contain_underscores:
+    recommended: true
+    description: Request or Response Body properties must not contain underscores.
+    type: style
+    given: '$..parameters[*].schema.properties'
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: _
+  se_model_title_must_not_contain_RPC_type_references:
+    recommended: true
+    description: Recommendation is to name Model without RPC type references
+    type: style
+    given: '$.definitions[*]'
+    severity: info
+    then:
+      field: title
+      function: pattern
+      functionOptions:
+        notMatch: (input|output|request|response|Input|Output|Request|Response)
+  se_model_key_must_not_contain_RPC_type_references:
+    recommended: true
+    description: Recommendation is to name Model key without RPC type references
+    type: style
+    given: $.definitions
+    severity: hint
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: (input|output|request|response|Input|Output|Request|Response)
+  se_host_must_be_qa:
+    recommended: true
+    given: $
+    type: style
+    then:
+      field: host
+      function: pattern
+      functionOptions:
+        match: api\.qa\.se\.com
+    description: API Host must be api.qa.se.com
+    severity: warn
+  se_security_must_contain_oauth2:
+    type: style
+    given: '$.securityDefinitions[*]'
+    recommended: true
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values:
+          - oauth2
+          - apiKey
+    description: 'Security Schema must be one of [apiKey, oauth2]'
+    message: 'Securty must be one of the allowed types: [oauth2, apiKey]'
+    severity: warn
+  se_basepath_must_not_be_empty:
+    description: basepath must exist and cannot be empty.
+    type: style
+    given: $
+    formats:
+      - oas2
+    then:
+      field: basePath
+      function: schema
+      functionOptions:
+        schema:
+          type: string
+    severity: warn
+  se_security_oauth_must_be_application:
+    type: style
+    given: '$.securityDefinitions[*]'
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+          - application
+      field: flow
+    description: oauth2 security must be of type 'application'
+    severity: warn
+  se_token_url:
+    type: style
+    given: '$.securityDefinitions[*].tokenUrl'
+    then:
+      function: pattern
+      functionOptions:
+        match: 'https:\/\/api\.qa\.se\.com\/token'
+    recommended: true
+    description: 'Security Schema Token url must be https://api.qa.se.com/token'
+    severity: warn
+  se_non_standard_response_code:
+    type: style
+    given: $.paths.*.*.responses
+    message: '{{property}} is not one of the standard http status codes supported in SEAPIM'
+    then:
+      field: '@key'
+      function: enumeration
+      functionOptions:
+        values:
+          - '200'
+          - '201'
+          - '202'
+          - '204'
+          - '304'
+          - '400'
+          - '401'
+          - '403'
+          - '404'
+          - '410'
+          - '412'
+          - '429'
+          - '500'
+          - '501'
+    recommended: true
+    description: HTTP Status code must be one of the standard status codes
+    severity: warn
+  se_host_security:
+    type: style
+    given: $.schemes.*
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+          - https
+    description: Host Security should have only https
+    message: Security schemes must only be https
+    severity: warn
+  se_oas3_server_urls:
+    type: style
+    formats:
+      - oas3
+    given: $.servers.*
+    message: 'Server URL must start with https://api[.qa].se.com/v<version>'
+    description: 'The urls for the servers in an API Specification should point to SEAPIM which is where consumers using the spec will be targetting. -- Please use https://api.qa.se.com/v.... for QA and (optionally) https://api.se.com/v... for production'
+    then:
+      field: url
+      function: pattern
+      functionOptions:
+        match: '^https:\/\/api(\.qa)?\.se\.com\/v[\d]+'
+  se_oas3_components_must_exist:
+    type: style
+    given: $
+    formats:
+      - oas3
+    message: '{{error}}'
+    then:
+      field: components
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          minProperties: 1
+  se_oas3_securitySchemes_must_exist:
+    type: style
+    formats:
+      - oas3
+    given: $.components
+    description: Security Schema must be defined
+    then:
+      field: securitySchemes
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          minProperties: 1
+  se_oas3_securitySchemes_must_be_oauth2:
+    type: style
+    formats:
+      - oas3
+    given: $.components.securitySchemes.*
+    message: Security needs to be oauth2 or apiKey
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values:
+          - oauth2
+          - apiKey
+  se_oas3_security_must_be_clientCredentials:
+    type: style
+    given: $.components.securitySchemes.*.flows
+    description: oauth2 flows must have client credentials
+    message: 'OAuth2 security flow "{{property}}" needs to be changed to "clientCredentials"'
+    then:
+      field: '@key'
+      function: enumeration
+      functionOptions:
+        values:
+          - clientCredentials
+  se_oas3_securty_flows_cannot_be_empty:
+    type: style
+    given: '$.components.securitySchemes[?(@.type=="oauth2")]'
+    formats:
+      - oas3
+    message: Security flows cannot be empty
+    then:
+      field: flows
+      function: length
+      functionOptions:
+        min: 1
+  se_oas3_securty_flows_must_exist:
+    type: style
+    given: '$.components.securitySchemes[?(@.type=="oauth2")]'
+    message: Security flows cannot be empty
+    then:
+      - field: flows
+        function: truthy
+  se_oas3_security_token_url:
+    type: style
+    formats:
+      - oas3
+    given: $.components.securitySchemes.*.flows.*.tokenUrl
+    description: 'Security Schema Token url must be https://api.qa.se.com/token'
+    then:
+      function: pattern
+      functionOptions:
+        match: 'https:\/\/api.qa.se.com\/token'
+  se_oas3_security_token_url_cannot_be_empty:
+    type: style
+    given: $.components.securitySchemes.*.flows.*
+    description: 'Security Schema Token url must be https://api.qa.se.com/token'
+    then:
+      - field: tokenUrl
+        function: truthy
+  se_property_type_must_be_string:
+    type: style
+    given: '$.definitions[*].properties[*]'
+    description: Properties must be only one type.
+    then:
+      field: type
+      function: schema
+      functionOptions:
+        schema:
+          type: string
+  se_security_cannot_be_empty:
+    type: style
+    given: $
+    message: Security Schemas must be defined
+    formats:
+      - oas2
+    then:
+      field: securityDefinitions
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          minProperties: 1
+    description: All APIs must have at least OAuth2 security implemented
+  se_tokenUrl_must_exist:
+    type: style
+    given: '$.securityDefinitions[?(@ && @.type=="oauth2")]'
+    message: tokenUrl must be defined for oauth2 security
+    then:
+      - field: tokenUrl
+        function: truthy
+    description: APIs need a token url for generating OAuth Token
+  se_200_needs_example:
+    type: style
+    given: $.paths.*.*.responses.200
+    message: 200 responses need at least one example
+    formats:
+      - oas2
+    then:
+      - field: examples
+        function: schema
+        functionOptions:
+          schema:
+            type: object
+            minProperties: 1
+    description: Success responses should have an example
+  se_descriptions:
+    type: style
+    given: $..properties.*
+    message: '{{property}} Missing field level description'
+    then:
+      - field: description
+        function: truthy
+    severity: warn
+    description: All fields should contain a description of what they are
+  se_response_codes:
+    type: style
+    given: $.paths.*.*.responses
+    message: '{{property}} needs to be included in the list of responses'
+    then:
+      - field: '400'
+        function: truthy
+      - field: '401'
+        function: truthy
+      - field: '403'
+        function: truthy
+      - field: '404'
+        function: truthy
+      - field: '429'
+        function: truthy
+      - field: '500'
+        function: truthy
+    description: List of SEAPIM platform response codes
+  se_parameters_oas3:
+    type: style
+    formats:
+      - oas3
+    given: $.paths.*.*.parameters.*
+    message: '{{property}} should be in schema block'
+    then:
+      - field: type
+        function: falsy
+      - field: default
+        function: falsy
+      - field: enum
+        function: falsy
+  se_oas3_route_produces_consumes:
+    type: style
+    formats:
+      - oas3
+    given: $.paths.*.*
+    message: '{{property}} should not be defined at the route level'
+    then:
+      - field: produces
+        function: falsy
+      - field: consumes
+        function: falsy
+    description: OAS3 Files should not have produces/consumes fields
+  se_get_requests_cannot_have_body:
+    type: style
+    given: $.paths.*.get.parameters.*
+    message: Get requests cannot have a body
+    then:
+      - field: in
+        function: pattern
+        functionOptions:
+          notMatch: /^body$/
+    description: Get requests cannot have a body
+  se_version_must_not_contain_patch:
+    type: style
+    given: $.info
+    message: Version must only have major and minor version
+    then:
+      field: version
+      function: pattern
+      functionOptions:
+        match: '/^[\d]+\.[\d]+$/'
+    description: basepaths/servers must not have anything other than major version
+  se_basepath_must_contain_valid_business_area:
+    recommended: true
+    type: style
+    given: $
+    message: Basepath must contain a valid business area.
+    description: |
+      There is a dedicated list of business reas that all basepaths can only contain one value from.
+      That list is: 
+       - customer-journey
+       - offer-design
+       - marketing-engagement
+       - marketing-plan-exec
+       - sales-operation
+       - pricing-quote
+       - customer-order
+       - fulfillment
+       - customer-support
+       - it
+       - finance-legal
+       - hr
+       - security
+       - reference-data
+       - technology
+       - ai
+       - governance
+       - research
+       - sustainability
+    formats:
+      - oas2
+    then:
+      field: basePath
+      function: pattern
+      functionOptions:
+        match: /\/v\d+\/(customer-journey|offer-design|marketing-engagement|marketing-plan-exec|sales-operation|pricing-quote|customer-order|fulfillment|customer-support|it|finance-legal|hr|security|reference-data|technology|ai|governance|research|sustainability)\/.+/
+  se_oas3_basepath_must_contain_valid_business_area:
+    recommended: true
+    type: style
+    given: $.servers.*
+    message: Basepath must contain a valid business area
+    description: |
+      There is a dedicated list of business reas that all basepaths can only contain one value from.
+      That list is: 
+       - customer-journey
+       - offer-design
+       - marketing-engagement
+       - marketing-plan-exec
+       - sales-operation
+       - pricing-quote
+       - customer-order
+       - fulfillment
+       - customer-support
+       - it
+       - finance-legal
+       - hr
+       - security
+       - reference-data
+       - technology
+       - ai
+       - governance
+       - research
+       - sustainability
+    formats:
+      - oas3
+    then:
+      field: url
+      function: pattern
+      functionOptions:
+        match: '^https:\/\/api(\.qa)?\.se\.com\/v\d+\/(customer-journey|offer-design|marketing-engagement|marketing-plan-exec|sales-operation|pricing-quote|customer-order|fulfillment|customer-support|it|finance-legal|hr|security|reference-data|technology|ai|governance|research|sustainability)\/.+'
+  se_basepath_deprecated_business_area:
+    recommended: true
+    type: style
+    given: $
+    message: 'Basepath contains a business area that has been deprecated. Consider updating to a supported value. {{message}}'
+    description: |
+      The list of deprecated business areas are:
+      - customer-journey
+      - marketing-plan-execution
+      - customer-order
+      - pricing-quote
+      - technology
+      The list of supported business areas are
+      - offer-design
+      - marketing-engagement
+      - sales-operation
+      - fulfillment
+      - customer-support
+      - it
+      - finance-legal
+      - hr
+      - security
+      - reference-data
+      - ai
+      - governance
+      - research
+      - sustainability
+    formats:
+      - oas2
+    severity: info
+    then:
+      field: basePath
+      function: pattern
+      functionOptions:
+        notMatch: /\/v\d+\/(customer-journey|marketing-plan-execution|customer-order|pricing-quote|technology)\/.+/
+  se_oas3_basepath_deprecated_business_area:
+    recommended: true
+    type: style
+    given: $.servers.*
+    message: Basepath contains a business area that has been deprecated. Consider updating to a supported value.
+    description: |
+      The list of deprecated business areas are:
+      - customer-journey
+      - marketing-plan-execution
+      - customer-order
+      - pricing-quote
+      - technology
+      The list of supported business areas are
+      - offer-design
+      - marketing-engagement
+      - sales-operation
+      - fulfillment
+      - customer-support
+      - it
+      - finance-legal
+      - hr
+      - security
+      - reference-data
+      - ai
+      - governance
+      - research
+      - sustainability
+    formats:
+      - oas3
+    severity: info
+    then:
+      field: url
+      function: pattern
+      functionOptions:
+        notMatch: '^https:\/\/api(\.qa)?\.se\.com\/v\d+\/(customer-journey|marketing-plan-execution|customer-order|pricing-quote|technology)\/.+'
+  se_oas3_must_not_contain_host:
+    type: style
+    formats:
+      - oas3
+    given: $
+    message: '{{property}} should not be in OAS 3 files'
+    then:
+      - field: host
+        function: falsy
+    severity: error
+    description: OAS3 files must not contain a host field
+  se_headers_must_not_include_bfo:
+    type: style
+    given: '$.paths.*.*.parameters[?(@.in=="header")].name'
+    message: X-BFO-Authorization header should be X-IDMS-Authorization
+    then:
+      - function: pattern
+        functionOptions:
+          notMatch: X-BFO-Authorization
+  se_name_must_not_end_with_api:
+    type: style
+    given: $.info
+    message: API Name should not end with API
+    then:
+      field: title
+      function: pattern
+      functionOptions:
+        notMatch: '(?:API)$'
+  se_api_name_should_not_have_data:
+    type: style
+    given: $.info
+    message: API Name should contain the word Data
+    then:
+      field: title
+      function: pattern
+      functionOptions:
+        notMatch: '(?:Data)'
+  se_api_name_should_not_have_management:
+    type: style
+    given: $.info
+    message: API Name should not contain the word Management
+    then:
+      field: title
+      function: pattern
+      functionOptions:
+        notMatch: '(?:Management)'
+  se_api_name_should_not_have_bulk:
+    type: style
+    given: $.info
+    message: API Name should not contain the word Bulk
+    then:
+      field: title
+      function: pattern
+      functionOptions:
+        notMatch: '(?:Bulk)'
+  se_api_name_should_not_have_service:
+    type: style
+    given: $.info
+    message: API Name should not end with Service
+    then:
+      field: title
+      function: pattern
+      functionOptions:
+        notMatch: '(?:Service)$'
+  se_api_name_should_not_end_with_catalog:
+    type: style
+    given: $.info
+    message: API Name should not end with Catalog
+    then:
+      field: title
+      function: pattern
+      functionOptions:
+        notMatch: '(?:Catalog)$'
+  se_api_name_should_not_have_reference:
+    type: style
+    given: $.info
+    message: API Name should not end with Reference
+    then:
+      field: title
+      function: pattern
+      functionOptions:
+        notMatch: '(?:Reference)$'
+  se_api_name_should_be_pascal_space_case:
+    description: 'API Names should be formatted using proper nouns, with spaces between words and each word starting with an upper case letter'
+    message: API Name should be proper noun(s) with spaces between words
+    given: $.info.title
+    then:
+      function: casing
+      functionOptions:
+        type: pascal
+        separator:
+          char: ' '
+  se_paths_must_not_use_verb_update:
+    recommended: true
+    description: Path name must not contain verbs
+    message: '{{property}} should not contain the word update'
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: update
+  se_paths_must_not_use_verb_create:
+    recommended: true
+    description: Path name must not contain verbs
+    message: '{{property}} should not contain the word create'
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: create
+  se_paths_must_not_use_verb_delete:
+    recommended: true
+    description: Path name must not contain verbs
+    message: '{{property}} should not contain the word delete'
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: delete
+  se_paths_must_not_use_word_api:
+    recommended: true
+    description: Path name must not contain action or description words
+    message: '{{property}} should not contain the word api'
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: \/api\/
+  se_paths_must_not_use_word_data:
+    recommended: true
+    description: Path name must not contain action or description words
+    message: '{{property}} should not contain the word data'
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: data
+  se_paths_must_not_use_word_bulk:
+    recommended: true
+    description: Path name must not contain action or description words
+    message: '{{property}} should not contain the word bulk'
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: bulk
+  se_paths_must_not_use_word_details:
+    recommended: true
+    description: Path name must not contain action or description words
+    message: '{{property}} should not contain the word details'
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: details
+  se_paths_must_not_use_word_info:
+    recommended: true
+    description: Path name must not contain action or description words
+    message: '{{property}} should not contain the word info'
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: info
+  se_paths_must_not_use_word_list:
+    recommended: true
+    description: Path name must not contain action or description words
+    message: '{{property}} should not contain the word list'
+    type: style
+    given: $.paths
+    then:
+      field: '@key'
+      function: pattern
+      functionOptions:
+        notMatch: list
+  se_oas_version_should_not_be_swagger:
+    description: 'Specification version is swagger 2.0 which is legacy. Consider updating to the more modern OpenAPI V3. You can find a tool to help with this on the [OpenAPI Converter](https://developer.api.se.com/api-design-review/tools/openapi-converter) page'
+    message: 'Specification format is OpenAPI V2, consider updating to OpenAPI V3'
+    type: style
+    given: $
+    then:
+      - field: swagger
+        function: falsy
+    severity: info
+  operation-tag-defined: 'off'
+  operation-tags: 'off'
+  operation-parameters: error
+  oas3-server-not-example.com: warn
+  oas2-host-not-example: warn
+  openapi-tags: 'off'

@@ -1,0 +1,3163 @@
+openapi: 3.0.0
+x-stoplight:
+  id: r917omni50d6a
+info:
+  title: API Catalog
+  version: '1.0'
+  description: "## Purpose\r\nThis API provides operations to view and manage the content of the catalog which is compromised of these primary resources, organised as a hierarchy (API > Proxy > Version)\r\n\r\nAPI - Represents a business user's concept of an API which is version-independent\r\n\r\nProxy - Component that runs on the SEAPIM API platform, managing API traffic\r\n\r\nVersion - A document describing how to use a specific API version, for reference by application developers\r\n\r\nThe API is scope-enabled, press Authorize to see the defined scopes. Default scoping provides **read-only** access.\r\n## Context\r\nThis is one of a set of SEAPIM platform APIs, built on a shared API catalog model which is maintained in a design library.\r\nSEAPIM is the Schneider Electric API management platform which hosts and secures access to APIs.\r\n\r\n## Notes\r\n- Only GET operations return a response payload\r\n- GET operations on an empty collection return an empty list []\r\n- Query parameter string values are case-insensitive\r\n- Array query parameters are processed as **AnyOf** unless documented to be AllOf\r\n- Operations on a resource identified by a unique id or key return 404 status if not found\r\n- GET operations on a resource identified by a unique id or key return an **etag**. This must be supplied via an **if-match** header in subsequent patch or delete operations\r\n- GET operations on a collection return the resource and its child resources. Limited to 1 level unless the operation is defined to handle multi-resource transactions.\r\n- GET operations on a collection return an etag but it is not useable for updates or deletes\r\n- GET responses are cached by default and remain fresh for 1 hour\r\n- Update and delete operations return a 412 status if an update conflict is detected\r\n- PUT performs an upsert. The request must include all required fields.\r\n- POST operations return a **location** header to the new resource.\r\n- PATCH operations perform upserts on child resources that are identified as a **leaf child**\r\n- To link an resource to a pre-existing resource, include the child's unique id or key in the request\r\n\r\n## Unique keys\r\nThese fields are keys that uniquely identify a resource if its database id is not known.\r\n- Api.name\r\n- Proxy.proxyName\r\n- Version.name|Version.version\r\n- Stakeholder.email\r\n- Consumer.seapimOrg|Consumer.seapimAppId\r\n- Product.seapimOrg|Product.productName\r\n- Exception.exceptionNumber\r\n- Capability.assetId\r\n\r\n## Role-based Functionality\r\nOperations affecting these stakeholder-related resources require a Ping token.\r\n- Stakeholder\r\n- Rating\r\n- ReadNotification\r\n- ConsumerProduct.apikeys\r\n"
+  contact:
+    name: Ravi Joshi
+    url: 'https://developer.api.se.com'
+    email: ravi.joshi@se.com
+  termsOfService: 'https://www.se.com/in/en/about-us/legal/terms-of-use.jsp'
+paths:
+  /apis:
+    get:
+      summary: Get API list
+      tags:
+        - API
+      responses:
+        '200':
+          description: Retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+                    - type: object
+                      x-stoplight:
+                        id: 8wxyqryvhgrdw
+                      properties:
+                        score:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Score.yaml'
+                        capabilities:
+                          description: 'List of business capabilities which the API is designed to support. They must all have the same parent business area, as defined within the SE Asset Management system'
+                          x-stoplight:
+                            id: k0l3woxhhvsjs
+                          type: array
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Capability.yaml'
+                        futureGoals:
+                          description: List of future goals related to the intended evolution of this API
+                          type: array
+                          x-stoplight:
+                            id: t0s14iy4tga9v
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Future%20Goal.yaml'
+                        kpis:
+                          description: List of KPIs (Key Process Indicators) related this API
+                          type: array
+                          x-stoplight:
+                            id: 5kpfkypkaegs5
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/KPI.yaml'
+                        apiOwner:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+                        latestProxy:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                        proxies:
+                          description: List of proxies for this API. Each proxy is associated with a major version
+                          type: array
+                          x-stoplight:
+                            id: catkcq7t82yul
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                        ratings:
+                          description: List of user ratings for this API
+                          type: array
+                          x-stoplight:
+                            id: w9v23gb325hdd
+                          items:
+                            x-stoplight:
+                              id: eru6lcmzayjwm
+                            allOf:
+                              - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Rating.yaml'
+                              - type: object
+                                x-stoplight:
+                                  id: a3wrgc8ih3pm4
+                                properties:
+                                  rater:
+                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+                        exceptions:
+                          description: List of exceptions for this API raised due to deviations from the SE API design standards
+                          type: array
+                          x-stoplight:
+                            id: tbt4j6zdi0pxb
+                          items:
+                            x-stoplight:
+                              id: 5bfcakmir24uo
+                            allOf:
+                              - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Exception.yaml'
+                              - type: object
+                                x-stoplight:
+                                  id: sh303gj934x9l
+                                properties:
+                                  proxy:
+                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                                  version:
+                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+                        certifications:
+                          description: List of completed certification records for this API
+                          type: array
+                          x-stoplight:
+                            id: 9t5vomobanfgv
+                          items:
+                            x-stoplight:
+                              id: vbh96xurez9n2
+                            allOf:
+                              - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Certification.yaml'
+                              - type: object
+                                x-stoplight:
+                                  id: nqh9rn3p79xeq
+                                properties:
+                                  version:
+                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+              examples: {}
+          headers:
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+            x-page:
+              $ref: '#/components/headers/x-page'
+            x-total-pages:
+              $ref: '#/components/headers/x-total-pages'
+            x-total-items:
+              $ref: '#/components/headers/x-total-items'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      x-stoplight:
+        id: vyks6mvwc46l6
+      operationId: get-apis
+      description: "Retrieve a list of APIs, filtered to match any query parameters.\r\n\r\nDefault behaviors\r\n- Returns page 1 with max of 1000 items\r\n- Sorted by name and proxies.majorNumber desc\r\n- Leaf children expanded by default: score, kpis, futureGoals, capabilities"
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - $ref: '#/components/parameters/fields'
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              enum:
+                - ratings
+                - certifications
+                - exceptions
+                - proxies
+                - latestProxy
+                - apiOwner
+            example:
+              - ratings
+              - exceptions
+          in: query
+          name: expands
+          description: Expand all fields of a named child resource
+        - schema:
+            type: string
+            minItems: 1
+            example: name%3Dconsent%26proxyName%3Dconsent
+          in: query
+          name: search
+          description: 'Partially match specified values to named fields within the API hierarchy. Expressed as a urlencoded sub-query where each element is a name=value pair separated by an ampersand character. Field must be one of: apiOwner, name, proxyName, assetName. Value must be at least 3 chars.'
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+            example:
+              - Finance
+              - Supply Chain
+          in: query
+          name: business-area
+          description: Business area within Schneider Electric
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              enum:
+                - DCR
+                - DDH
+                - FIN
+                - GHR
+                - GSC
+                - LOB
+                - EIT
+            example:
+              - DCR
+              - DDH
+          in: query
+          name: domain
+          description: Business domain within Schneider Digital organization
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+            example:
+              - platform
+              - erp
+          in: query
+          name: category
+          description: Category or tag which has been applied to the API
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              enum:
+                - draft
+                - live
+                - decommissioned
+                - deleted
+            example:
+              - live
+          in: query
+          name: status
+          description: API status
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: is-partner
+          description: Partner API indicator
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: is-published
+          description: Publication indicator i.e whether an API is visible to users of the catalog.
+    post:
+      summary: Create an API
+      tags:
+        - API
+      responses:
+        '201':
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/location'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: post-apis
+      x-stoplight:
+        id: pum2i9c53tm5s
+      description: "Create an API.\r\n\r\nIf included in the request body, this operation upserts and links these child resources:\r\nkpis, futureGoals, capabilities, apiOwner\r\n\r\nFor the linked API owner, api-owner role is added."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+                - type: object
+                  properties:
+                    capabilities:
+                      description: 'List of business capabilities which the API is designed to support. They must all have the same parent business area, as defined within the SE Asset Management system'
+                      type: array
+                      x-stoplight:
+                        id: y2foctm07bl7p
+                      items:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Capability.yaml'
+                    futureGoals:
+                      description: List of future goals related to the intended evolution of this API
+                      type: array
+                      x-stoplight:
+                        id: r0rai9gso7lvl
+                      items:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Future%20Goal.yaml'
+                    kpis:
+                      description: List of KPIs (Key Process Indicators) related this API
+                      type: array
+                      x-stoplight:
+                        id: kd8aj58tiagxe
+                      items:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/KPI.yaml'
+                    apiOwner:
+                      $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+            examples: {}
+  '/apis/{unique-key}':
+    parameters:
+      - $ref: '#/components/parameters/unique-key'
+    get:
+      summary: Get an API
+      tags:
+        - API
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+                  - type: object
+                    x-stoplight:
+                      id: i7lumr1e3rf23
+                    properties:
+                      score:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Score.yaml'
+                      capabilities:
+                        description: 'List of business capabilities which the API is designed to support. They must all have the same parent business area, as defined within the SE Asset Management system'
+                        type: array
+                        x-stoplight:
+                          id: 3prqwnlh2378o
+                        items:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Capability.yaml'
+                      futureGoals:
+                        description: List of future goals related to the intended evolution of this API
+                        type: array
+                        x-stoplight:
+                          id: 2s6rk6k9ho5le
+                        items:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Future%20Goal.yaml'
+                      kpis:
+                        description: List of KPIs (Key Process Indicators) related this API
+                        type: array
+                        x-stoplight:
+                          id: g5yjlg3b60gq6
+                        items:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/KPI.yaml'
+                      apiOwner:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+                      latestProxy:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                      proxies:
+                        description: List of proxies for this API. Each proxy is associated with a major version
+                        type: array
+                        x-stoplight:
+                          id: unz0fol31d36v
+                        items:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                      ratings:
+                        description: List of user ratings for this API
+                        type: array
+                        x-stoplight:
+                          id: rtx4bk23sfndh
+                        items:
+                          x-stoplight:
+                            id: j14l75nc2w84g
+                          allOf:
+                            - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Rating.yaml'
+                            - type: object
+                              x-stoplight:
+                                id: 64c9z3avdx6sc
+                              properties:
+                                rater:
+                                  $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+                      exceptions:
+                        description: List of exceptions for this API raised due to deviations from the SE API design standards
+                        type: array
+                        x-stoplight:
+                          id: ejqgi34dt3qgm
+                        items:
+                          x-stoplight:
+                            id: 6shpxvy24qhpz
+                          allOf:
+                            - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Exception.yaml'
+                            - type: object
+                              x-stoplight:
+                                id: 7akyvhmkbk6ih
+                              properties:
+                                proxy:
+                                  $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                                version:
+                                  $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+                      certifications:
+                        description: List of completed certification records for this API
+                        type: array
+                        x-stoplight:
+                          id: a8lapeqpmkrrt
+                        items:
+                          x-stoplight:
+                            id: cpuyw5sbjq5xp
+                          allOf:
+                            - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Certification.yaml'
+                            - type: object
+                              x-stoplight:
+                                id: 1lvjyn5lff6gf
+                              properties:
+                                version:
+                                  $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+              examples: {}
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-apis-unique-key
+      x-stoplight:
+        id: k6lcmh775pqdi
+      description: "Get an API.\r\n"
+    patch:
+      summary: Update an API
+      tags:
+        - API
+      responses:
+        '200':
+          description: Updated
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: patch-apis-unique-key
+      x-stoplight:
+        id: 6tfybe222obxw
+      description: "Update an API.\r\n\r\nIf included in the request body, this operation upserts and links these child resources:\r\nkpis, futureGoals, capabilities\r\n\r\nOmit score which is read only."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+                - type: object
+                  x-stoplight:
+                    id: b4cdc0rvsl3tz
+                  properties:
+                    capabilities:
+                      description: 'List of business capabilities which the API is designed to support. They must all have the same parent business area, as defined within the SE Asset Management system'
+                      type: array
+                      x-stoplight:
+                        id: y2foctm07bl7p
+                      items:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Capability.yaml'
+                    futureGoals:
+                      description: List of future goals related to the intended evolution of this API
+                      type: array
+                      x-stoplight:
+                        id: r0rai9gso7lvl
+                      items:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Future%20Goal.yaml'
+                    kpis:
+                      description: List of KPIs (Key Process Indicators) related this API
+                      type: array
+                      x-stoplight:
+                        id: kd8aj58tiagxe
+                      items:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/KPI.yaml'
+                    apiOwner:
+                      $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+            examples: {}
+    delete:
+      summary: Hard delete a draft API
+      tags:
+        - API
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-apis-unique-key
+      x-stoplight:
+        id: ujaujycyug4md
+      description: "If status is draft, transactionally delete the API, its proxies, versions, leaf child resources and associations with non-leaf children.\r\nIf status is not draft, return a 400 status.\r\n\r\nNote that caches will retain copies of the affected resources until they become stale."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+  '/apis/{unique-key}/kpis/{kpi-id}':
+    parameters:
+      - $ref: '#/components/parameters/unique-key'
+      - schema:
+          type: string
+        name: kpi-id
+        in: path
+        required: true
+        description: A unique number identifier for a KPI
+    delete:
+      summary: Delete a KPI for an API
+      tags:
+        - API
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-apis-unique-key-kpis-kpi-id
+      x-stoplight:
+        id: g0ve72i14b0hu
+      description: "Delete a KPI for a specified parent API.\r\n\r\nUse the if-match header to pass the API etag."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+  '/apis/{unique-key}/future-goals/{goal-id}':
+    parameters:
+      - $ref: '#/components/parameters/unique-key'
+      - schema:
+          type: string
+        name: goal-id
+        in: path
+        required: true
+        description: A unique number identifier for a future goal
+    delete:
+      summary: Delete future goal for an API
+      tags:
+        - API
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-apis-unique-key-future-goals-goal-id
+      x-stoplight:
+        id: sh6rk169q5s6t
+      description: "Delete a future goal for a specified parent API.\r\n\r\nUse the if-match header to pass the API etag."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+  '/apis/{unique-key}/capabilities/{asset-id}':
+    parameters:
+      - $ref: '#/components/parameters/unique-key'
+      - schema:
+          type: string
+        name: asset-id
+        in: path
+        required: true
+        description: A unique string identifier for a capability asset in the SE asset management system
+    delete:
+      summary: Delete capability for an API
+      tags:
+        - API
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-apis-unique-key-capabilities-asset-id
+      x-stoplight:
+        id: 7pythlo1uso7y
+      description: "Delete a capability association for a specified parent API. The actual capability cannot be deleted as it is read-only.\r\n\r\nUse the if-match header to pass the API etag."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+  '/apis/{unique-key}/ratings':
+    parameters:
+      - $ref: '#/components/parameters/unique-key'
+    put:
+      summary: Replace a stakeholder's API rating
+      tags:
+        - API
+      responses:
+        '200':
+          description: Replaced
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: put-apis-unique-key-ratings
+      x-stoplight:
+        id: rk8tb0xmtrnki
+      description: 'Replace (upsert) a stakeholder''s API rating, where identity of the rater is determined from a validated ping token.'
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-ping-authorization
+          description: Ping IDP token for the rater
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Rating.yaml'
+    delete:
+      summary: Delete a stakeholder's API rating
+      tags:
+        - API
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-apis-unique-key-ratings
+      x-stoplight:
+        id: id7l2ps6nf5gh
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-ping-authorization
+          description: Ping IDP token for the rater
+          required: true
+      description: 'Delete a stakeholder''s API rating, where identity of the rater is determined from a validated ping token.'
+  /proxies:
+    get:
+      summary: Get proxy list
+      tags:
+        - Proxy
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+            x-page:
+              $ref: '#/components/headers/x-page'
+            x-total-pages:
+              $ref: '#/components/headers/x-total-pages'
+            x-total-items:
+              $ref: '#/components/headers/x-total-items'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                    - type: object
+                      x-stoplight:
+                        id: pjfihbwcxj5xz
+                      properties:
+                        metric:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Metric.yaml'
+                        buildQuality:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Build%20Quality.yaml'
+                        proxyProviders:
+                          description: List of application system providers (proxy backends) that implement this API major version
+                          type: array
+                          x-stoplight:
+                            id: zp6arvwu7o11z
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy%20Provider.yaml'
+                        requirements:
+                          description: List of proxy technical requirements
+                          type: array
+                          x-stoplight:
+                            id: zxwdq6v29ijr9
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Requirement.yaml'
+                        tickets:
+                          description: List of tickets raised for this proxy
+                          type: array
+                          x-stoplight:
+                            id: pch9i6sqnmrd0
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Ticket.yaml'
+                        exceptions:
+                          description: List of exceptions for this API raised due to deviations from the SE API design standards
+                          type: array
+                          x-stoplight:
+                            id: tmvpxue52hsce
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Exception.yaml'
+                        latestVersion:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+                        versions:
+                          description: List of API versions supported by this proxy
+                          type: array
+                          x-stoplight:
+                            id: vemzoc47i15u2
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+                        productProxies:
+                          description: List of API manager products that include this proxy
+                          type: array
+                          x-stoplight:
+                            id: gkhvaklkif4ko
+                          items:
+                            x-stoplight:
+                              id: y5kdjeb3ktdkx
+                            allOf:
+                              - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product%20Proxy.yaml'
+                              - type: object
+                                x-stoplight:
+                                  id: n7wgz8tg2pe9n
+                                properties:
+                                  product:
+                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product.yaml'
+                        api:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-proxies
+      x-stoplight:
+        id: 3bmk1f008er8t
+      description: "Retrieve a list of proxies, filtered to match any query parameters.\r\n\r\nDefault behaviors\r\n- Returns page 1 with max of 1000 items\r\n- Sorted by proxyName and versions.minorNumber desc\r\n- Leaf children expanded by default: metric, buildQuality, proxyProviders including applicationAsset"
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - $ref: '#/components/parameters/fields'
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              enum:
+                - requirements
+                - tickets
+                - exceptions
+                - latestVersion
+                - versions
+                - productProxies
+                - api
+            example:
+              - requirements
+              - latestVersion
+          in: query
+          name: expands
+          description: Expand all fields of a named child resource
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              enum:
+                - draft
+                - live
+                - decommissioned
+                - deleted
+            example:
+              - live
+          in: query
+          name: status
+          description: Proxy status
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: is-published
+          description: Publication indicator i.e whether a proxy is visible to users of the catalog
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: is-in-development
+          description: 'Whether the proxy is in development, not yet pushed to SEAPIM production'
+    post:
+      summary: Create a proxy
+      tags:
+        - Proxy
+      responses:
+        '201':
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/location'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: post-proxies
+      x-stoplight:
+        id: nueaj44vzki0l
+      description: "Create a proxy.\r\n\r\nIf included in the request body, this operation upserts and links these child resources:\r\nbuildQuality, proxyProvider including applicationAsset."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                - type: object
+                  properties:
+                    buildQuality:
+                      $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Build%20Quality.yaml'
+                    proxyProviders:
+                      description: List of application system providers (proxy backends) that implement this API major version
+                      type: array
+                      x-stoplight:
+                        id: gtugcj98t10fr
+                      items:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy%20Provider.yaml'
+                    api:
+                      $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+  '/proxies/{unique-key}':
+    parameters:
+      - $ref: '#/components/parameters/unique-key'
+    get:
+      summary: Get a proxy
+      tags:
+        - Proxy
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                  - type: object
+                    x-stoplight:
+                      id: ntdf1s3bkmehi
+                    properties:
+                      metric:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Metric.yaml'
+                      buildQuality:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Build%20Quality.yaml'
+                      proxyProviders:
+                        description: List of application system providers (proxy backends) that implement this API major version
+                        type: array
+                        x-stoplight:
+                          id: 0ljnfjh1fn4ra
+                        items:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy%20Provider.yaml'
+                      requirements:
+                        description: List of proxy technical requirements
+                        type: array
+                        x-stoplight:
+                          id: qms1qhointeqs
+                        items:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Requirement.yaml'
+                      tickets:
+                        description: List of tickets raised for this proxy
+                        type: array
+                        x-stoplight:
+                          id: 32nox6nxvlby5
+                        items:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Ticket.yaml'
+                      exceptions:
+                        description: List of exceptions for this API raised due to deviations from the SE API design standards
+                        type: array
+                        x-stoplight:
+                          id: 764idwiv01opv
+                        items:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Exception.yaml'
+                      latestVersion:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+                      versions:
+                        description: List of API versions supported by this proxy
+                        type: array
+                        x-stoplight:
+                          id: cvcqw5qb8p75k
+                        items:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+                      productProxies:
+                        description: List of API manager products that include this proxy
+                        type: array
+                        x-stoplight:
+                          id: lvsi5czlby3nb
+                        items:
+                          x-stoplight:
+                            id: 3xnzuz3gg6bd1
+                          allOf:
+                            - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product%20Proxy.yaml'
+                            - type: object
+                              x-stoplight:
+                                id: biwm676ihgko0
+                              properties:
+                                product:
+                                  $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product.yaml'
+                      api:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-proxies-unique-key
+      x-stoplight:
+        id: qyzedasgr834t
+      description: Get a proxy.
+    patch:
+      summary: Update a proxy
+      tags:
+        - Proxy
+      responses:
+        '200':
+          description: Updated
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: patch-proxies-unique-key
+      x-stoplight:
+        id: fg7pqplz3txco
+      description: "Update a proxy.\r\n\r\nIf included in the request body, this operation upserts and links these child resources:\r\nbuildQuality, proxyProviders including applicationAsset\r\n\r\nOmit metric which is read only."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                - type: object
+                  x-stoplight:
+                    id: xbkrwy0rjbwpl
+                  properties:
+                    buildQuality:
+                      $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Build%20Quality.yaml'
+                    proxyProviders:
+                      description: List of application system providers (proxy backends) that implement this API major version
+                      type: array
+                      x-stoplight:
+                        id: gtugcj98t10fr
+                      items:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy%20Provider.yaml'
+                    api:
+                      $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+    delete:
+      summary: Hard delete a draft proxy
+      tags:
+        - Proxy
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-proxies-unique-key
+      x-stoplight:
+        id: dmxy5ke45v6j0
+      description: "If status is draft, transactionally delete the proxy, its versions, leaf child resources and associations with non-leaf children.\r\nIf status is not draft, return a 400 status.\r\n\r\nNote that caches will retain copies of the affected resources until they become stale."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+  '/proxies/{unique-key}/build-qualities/{quality-id}':
+    parameters:
+      - $ref: '#/components/parameters/unique-key'
+      - schema:
+          type: string
+        name: quality-id
+        in: path
+        required: true
+        description: A unique number identifier for a build quality assessment
+    delete:
+      summary: Delete build quality for a proxy
+      tags:
+        - Proxy
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-proxies-unique-key-build-qualities-quality-id
+      x-stoplight:
+        id: vev5mxv4be3jy
+      description: "Delete build quality assessment for a specified parent proxy.\r\n\r\nUse the if-match header to pass the proxy etag."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+  '/proxies/{unique-key}/proxy-providers/{asset-id}':
+    parameters:
+      - $ref: '#/components/parameters/unique-key'
+      - schema:
+          type: string
+        name: asset-id
+        in: path
+        required: true
+        description: A unique string identifier for an application asset in the SE asset management system
+    delete:
+      summary: Delete a proxy provider for a proxy
+      tags:
+        - Proxy
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-proxies-unique-key-proxy-providers-asset-id
+      x-stoplight:
+        id: zh4osnkgrodnd
+      description: "Delete a proxy provider for a proxy. The linked application asset is not deleted as it may be shared by a consumer.\r\n\r\nUse the if-match header to pass the proxy etag."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+  /versions:
+    get:
+      summary: Get version list
+      tags:
+        - Version
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+            x-page:
+              $ref: '#/components/headers/x-page'
+            x-total-pages:
+              $ref: '#/components/headers/x-total-pages'
+            x-total-items:
+              $ref: '#/components/headers/x-total-items'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+                    - type: object
+                      x-stoplight:
+                        id: us8gjisuhng86
+                      properties:
+                        documentLocation:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Document%20Location.yaml'
+                        documentQuality:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Document%20Quality.yaml'
+                        review:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Review.yaml'
+                        defects:
+                          description: List of defects identified by an API reviewer
+                          type: array
+                          x-stoplight:
+                            id: ficl6eicfo7c5
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Defect.yaml'
+                        certification:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Certification.yaml'
+                        certificationRequest:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Certification.yaml'
+                        exceptions:
+                          description: List of exceptions for this API raised due to deviations from the SE API design standards
+                          type: array
+                          x-stoplight:
+                            id: gajggrkyi00ba
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Exception.yaml'
+                        reviewSlot:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Review%20Slot.yaml'
+                        proxy:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-versions
+      x-stoplight:
+        id: k4917nu6hnj22
+      description: "Retrieve a list of API versions, filtered to match any query parameters.\r\n\r\nDefault behaviors\r\n- Returns page 1 with max of 1000 items\r\n- Sorted by name and minorNumber desc\r\n- Leaf children expanded by default: documentLocation, documentQuality, review, defects"
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - $ref: '#/components/parameters/fields'
+        - schema:
+            type: string
+            example: API catalog
+          in: query
+          name: name
+          description: Version name matching title within the OAS document
+        - schema:
+            type: string
+            example: '1.0'
+          in: query
+          name: version
+          description: Version number matching version within the OAS document
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              enum:
+                - certification
+                - certificationRequest
+                - exceptions
+                - reviewSlot
+                - proxy
+            example:
+              - certification
+              - exceptions
+          in: query
+          name: expands
+          description: Expand all fields of a named child resource
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: is-published
+          description: Publication indicator i.e whether a version is visible to users of the catalog
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: is-draft
+          description: Whether this is a draft version
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: is-certified
+          description: Whether this is a certified version
+    post:
+      summary: Create a version
+      tags:
+        - Version
+      responses:
+        '201':
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/location'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: post-versions
+      x-stoplight:
+        id: 3pynmwrr1mj1c
+      description: "Create a version.\r\n\r\nIf included in the request body, this operation upserts and links these child resources:\r\ndocumentLocation, documentQuality\r\n\r\nSee also the **API review** specification which offers specialised operations to create review resources:\r\nreview, documentLocation, defects"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+                - type: object
+                  properties:
+                    documentLocation:
+                      $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Document%20Location.yaml'
+                    documentQuality:
+                      $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Document%20Quality.yaml'
+                    proxy:
+                      $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+        description: Use operations in the API Review Requirement API to create reviews and defects.
+  '/versions/{version-unique-key}':
+    parameters:
+      - $ref: '#/components/parameters/version-unique-key'
+    get:
+      summary: Get a version
+      tags:
+        - Version
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+                  - type: object
+                    x-stoplight:
+                      id: vnx977h8ffcxs
+                    properties:
+                      documentLocation:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Document%20Location.yaml'
+                      documentQuality:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Document%20Quality.yaml'
+                      review:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Review.yaml'
+                      defects:
+                        description: List of defects identified by an API reviewer
+                        type: array
+                        x-stoplight:
+                          id: qv1c9bf5qb0rp
+                        items:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Defect.yaml'
+                      certification:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Certification.yaml'
+                      certificationRequest:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Certification%20Request.yaml'
+                      exceptions:
+                        description: List of exceptions for this API raised due to deviations from the SE API design standards
+                        x-stoplight:
+                          id: cv1uvnxv3ec19
+                        type: array
+                        items:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Exception.yaml'
+                      reviewSlot:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Review%20Slot.yaml'
+                      proxy:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-versions-unique-key
+      x-stoplight:
+        id: ouxx3znu2rtqj
+      description: Get a version.
+    patch:
+      summary: Update a version or convert from draft
+      tags:
+        - Version
+      responses:
+        '200':
+          description: Updated
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: patch-versions-unique-key
+      x-stoplight:
+        id: y7sfaq29jp9jk
+      description: "Transactionally update a version.\r\n\r\nIf current version.isDraft is false and the request body includes isDraft = true, it additionally upserts the parent proxy and grandparent API. A 400 status is returned if proxy or api is not provided for this scenario.\r\n\r\n**Version update**\r\nIf included in the request body, this operation upserts and links these version child resources:\r\ndocumentQuality, documentLocation.\r\n\r\nOther child resources review and defects are not updateable from this operation. See the **API review** API for specialized operations to manage them.\r\n\r\n**Proxy draft finalization update**\r\nIf included in the request body, the parent proxy is upserted and linked to the version. These child resources may also be upserted:\r\nproxyProviders including applicationAsset.\r\n\r\nAdditionally, derived Proxy values (status and latestVersion ) are recalculated.\r\nIf the proxy has changed, derived values for the former linked proxy are also recalculated.\r\n\r\n**API draft finalization update**\r\nIf included in the request body, the version's grandparent api is updated including upserting of any capabilities.\r\nIf the api has changed, a 400 error is returned. In all scenarios the API must pre-exist.\r\n\r\nIf the current api.apiOwner differs from the required apiOwner, it upserts the owner stakeholder record adding the api-owner role.\r\nIf the former owner owns no other active API, their app-owner role is removed.\r\n\r\nAdditionally, derived API values (status, latestProxy and score) are recalculated.\r\n"
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+                - type: object
+                  properties:
+                    documentLocation:
+                      $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Document%20Location.yaml'
+                    documentQuality:
+                      $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Document%20Quality.yaml'
+                    proxy:
+                      description: parent proxy for this version
+                      x-stoplight:
+                        id: k4s5n2tqgm6fv
+                      allOf:
+                        - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                        - type: object
+                          x-stoplight:
+                            id: k9kfp8p13y9p8
+                          properties:
+                            proxyProviders:
+                              description: List of application system providers (proxy backends) that implement this API major version
+                              x-stoplight:
+                                id: i7zwaye1gf6re
+                              type: array
+                              items:
+                                $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy%20Provider.yaml'
+                            api:
+                              description: Grandparent API for this version
+                              x-stoplight:
+                                id: mmf7r1ehtxsrk
+                              allOf:
+                                - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+                                - type: object
+                                  x-stoplight:
+                                    id: 4jl0qq8gvuh67
+                                  properties:
+                                    capabilities:
+                                      description: 'List of business capabilities which the API is designed to support. They must all have the same parent business area, as defined within the SE Asset Management system'
+                                      type: array
+                                      x-stoplight:
+                                        id: gztm4f93cgp8k
+                                      items:
+                                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Capability.yaml'
+                                    apiOwner:
+                                      $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+        description: Use operations in the API Review API to manage reviews and defects.
+      security:
+        - apikey: []
+    delete:
+      summary: Hard delete a draft version
+      tags:
+        - Version
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-versions-unique-key
+      x-stoplight:
+        id: ds1jgvu1pooqb
+      description: "If isDraft is true, transactionally delete the version, its leaf child resources and associations with non-leaf children.\r\nIf status is not draft, return a 400 status.\r\n\r\nNote that caches will retain copies of the affected resources until they become stale."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+  '/versions/{version-unique-key}/document-qualities/{quality-id}':
+    parameters:
+      - $ref: '#/components/parameters/version-unique-key'
+      - schema:
+          type: string
+        name: quality-id
+        in: path
+        required: true
+        description: A unique number identifier for a document quality assessment
+    delete:
+      summary: Delete document quality for a version
+      tags:
+        - Version
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-versions-unique-key-document-qualities-quality-id
+      x-stoplight:
+        id: 4xme693qr93bp
+      description: "Delete a document quality assessment for a specified parent version.\r\n\r\nUse the if-match header to pass the version etag."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+  '/versions/{version-unique-key}/apis/{name}/certifications':
+    parameters:
+      - schema:
+          type: string
+        name: name
+        in: path
+        required: true
+      - $ref: '#/components/parameters/version-unique-key'
+    put:
+      summary: Replace a version's certification
+      tags:
+        - Version
+        - API
+      responses:
+        '200':
+          description: Replaced
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: put-versions-unique-key-apis-name-certifications
+      x-stoplight:
+        id: gb58r2r9pffgq
+      description: Replace (upsert) a version's API certification.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Certification.yaml'
+    delete:
+      summary: Delete a version's certification
+      tags:
+        - Version
+        - API
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-versions-version-unique-key-apis-name-certifications
+      x-stoplight:
+        id: jxfpkbxld1wxf
+      description: Delete a version's API certification.
+  /stakeholders:
+    post:
+      summary: Create a stakeholder
+      tags:
+        - Stakeholder
+      responses:
+        '201':
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/location'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: post-stakeholders
+      x-stoplight:
+        id: 948iuh3j6ol68
+      description: "Create an stakeholder.\r\n\r\nIf ping token is not provided it creates a record with \"user\" role.\r\n\r\nIf ping token is a stakeholder without an admin role, it returns 403 status if the request payload includes any role other than \"user\"."
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-ping-authorization
+          description: Ping IDP token for the caller
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+    get:
+      summary: Get stakeholder list
+      tags:
+        - Stakeholder
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+            x-page:
+              $ref: '#/components/headers/x-page'
+            x-total-pages:
+              $ref: '#/components/headers/x-total-pages'
+            x-total-items:
+              $ref: '#/components/headers/x-total-items'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  x-stoplight:
+                    id: fjca7bldf4ezg
+                  allOf:
+                    - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+                    - type: object
+                      x-stoplight:
+                        id: zdl44wyzj6fje
+                      properties:
+                        ownedApis:
+                          description: List of APIs owned by this stakeholder
+                          type: array
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+                        ownedConsumer:
+                          description: List of consumer applications owned by this stakeholder
+                          type: array
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Consumer.yaml'
+                        requestedExceptions:
+                          description: List of exceptions requested by this stakeholder
+                          type: array
+                          x-stoplight:
+                            id: tonvf9tncblsm
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Exception.yaml'
+                        apiOwnerForTickets:
+                          description: List of tickets where this stakeholder is the API owner
+                          type: array
+                          x-stoplight:
+                            id: doh25ug4g1cpy
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Ticket.yaml'
+                        appOwnerForTickets:
+                          description: List of tickets where this stakeholder is the application owner
+                          type: array
+                          x-stoplight:
+                            id: n5fc3w6rxyvth
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Ticket.yaml'
+                        requestedTickets:
+                          description: List of tickets requested by this stakeholder
+                          type: array
+                          x-stoplight:
+                            id: u8rc3c9nrwtxy
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Ticket.yaml'
+                        watchedTickets:
+                          description: List of tickets watched by this stakeholder
+                          type: array
+                          items:
+                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Ticket.yaml'
+                        ratedApis:
+                          description: List of APIs rated by this stakeholder
+                          type: array
+                          x-stoplight:
+                            id: d7ulzls37tjk8
+                          items:
+                            x-stoplight:
+                              id: frsnqiguvz0ku
+                            allOf:
+                              - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Rating.yaml'
+                              - type: object
+                                x-stoplight:
+                                  id: lm7h29qwescup
+                                properties:
+                                  api:
+                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-stakeholders
+      x-stoplight:
+        id: bfhdsnxfjbpj3
+      description: "Retrieve a list of stakeholders, filtered to match any query parameters.\r\n\r\nCaller identity is determined from a validated ping token.\r\n\r\nWhen caller has the admin role\r\n- Returns page 1 with max of 1000 items\r\n- Sorted by email desc\r\n\r\nWhen caller does not have the admin role\r\n- Returns stakeholder record matching the caller's email\r\n- Returns 403 status if email query parameter is set to someone else's email"
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - schema:
+            type: string
+          in: header
+          name: x-ping-authorization
+          description: Ping IDP token for the caller
+          required: true
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              enum:
+                - user
+                - admin
+                - api_owner
+                - app_owner
+            example:
+              - api_owner
+          in: query
+          name: role
+          description: Stakeholder API role
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              enum:
+                - ownedApis
+                - ownedConsumers
+                - requestedExceptions
+                - apiOwnerForTickets
+                - appOwnerForTickets
+                - requestedTickets
+                - watchedTickets
+                - ratedApis
+            example:
+              - ownedApis
+              - ratedApis
+          in: query
+          name: expands
+          description: Expand all fields of a named child resource
+        - schema:
+            type: string
+            format: email
+            example: joe.smith@se.com
+          in: query
+          name: email
+          description: Stakeholder email
+  '/stakeholders/{unique-key}':
+    parameters:
+      - $ref: '#/components/parameters/unique-key'
+    get:
+      summary: Get a stakeholder
+      tags:
+        - Stakeholder
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+          content:
+            application/json:
+              schema:
+                $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+              examples: {}
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-stakeholders-unique-key
+      x-stoplight:
+        id: iew0frikd2sz7
+      description: Get a stakeholder.
+    patch:
+      summary: Update a stakeholder
+      tags:
+        - Stakeholder
+      responses:
+        '200':
+          description: Updated
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: patch-stakeholders-unique-key
+      x-stoplight:
+        id: daqm36z8gel26
+      description: "Update a stakeholder.\r\n\r\nCaller identity is determined from a validated ping token (optional).\r\nIf ping token is a stakeholder without an admin role, it returns 403 status if the request payload includes any role other than \"user\"."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+        - schema:
+            type: string
+          in: header
+          name: x-ping-authorization
+          description: Ping IDP token for the caller
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+        description: ''
+  /capabilities:
+    get:
+      summary: Get capability list
+      tags:
+        - Reference
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Capability.yaml'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-capabilities
+      x-stoplight:
+        id: j8sieo2ijxipa
+      description: "Retrieve a list of capabilities, filtered to match any query parameters.\r\n\r\nDefault behavior\r\n- Sorted by businessArea, assetStatus"
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+        - schema:
+            type: string
+            example: Customer Service
+          in: query
+          name: business-area
+          description: Parent business area for a capability
+        - schema:
+            type: string
+            example: In Operation
+          in: query
+          name: asset-status
+          description: Asset status that originated from the asset system
+  '/values/{type}':
+    parameters:
+      - schema:
+          type: string
+          enum:
+            - businessArea
+            - capability
+            - category
+          example: businessArea
+        name: type
+        in: path
+        required: true
+        description: Which type of values to retrieve
+    get:
+      summary: Get set of values for a value type
+      tags:
+        - Reference
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: Customer Service
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-values-type
+      x-stoplight:
+        id: 2zvjbnvsbohof
+      description: "Get set of values for a specified value type.\r\n\r\nItems are included in the response based on data in the catalog, optionally filtered by status\r\n\r\nFor example:\r\n- All API.categories in use, where any status filter is matched to Api.status\r\n- All API.capabilities in use, where any status filter is matched to Api.status\r\n- All Capability.businessAreas that originate from the asset system, where any assetStatus filter is matched to Capability.assetStatus"
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+            example:
+              - draft
+              - live
+          in: query
+          name: status
+          description: 'Value status, matched against the underlying resource status. For example, Api.status, Capability.assetStatus.'
+  /exceptions:
+    get:
+      summary: Get exception list
+      tags:
+        - Exception
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Exception.yaml'
+                    - type: object
+                      x-stoplight:
+                        id: h0482ncpnu9gs
+                      properties:
+                        requester:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+                        api:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+                        proxy:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                        version:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-exceptions
+      x-stoplight:
+        id: x1as88ufyxkst
+      description: "Retrieve a list of exceptions, filtered to match any query parameters.\r\n\r\nDefault behavior\r\n- Sorted by createdAt desc"
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              enum:
+                - api
+                - proxy
+                - version
+                - requester
+            example:
+              - proxy
+          in: query
+          name: expands
+          description: Expand all fields of a named child resource
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              enum:
+                - submitted
+                - approved
+                - rejected
+                - closed
+            example:
+              - approved
+          in: query
+          name: request-status
+          description: Exception status
+        - schema:
+            type: string
+            enum:
+              - design
+              - implementation
+            example: design
+          in: query
+          name: exception-type
+          description: Exception type
+    post:
+      summary: Create an exception
+      tags:
+        - Exception
+      responses:
+        '201':
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/location'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: post-exceptions
+      x-stoplight:
+        id: ta62h4yq9oapm
+      description: "Create an exception for an API.\r\n\r\nIf exceptionType is design, then the associated version is required.\r\nIf exceptionType is implementation, then the associated proxy is required.\r\n\r\nThis operation upserts and links the requester stakeholder record."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Exception.yaml'
+                - allOf:
+                    - properties:
+                        requester:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+                        api:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+                    - x-stoplight:
+                        id: my46y7uw79b3y
+                      oneOf:
+                        - properties:
+                            version:
+                              $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml?deref=bundle'
+                        - x-stoplight:
+                            id: uc57xyrspqjnd
+                          properties:
+                            proxy:
+                              $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml?deref=bundle'
+                  type: object
+            examples: {}
+  '/exceptions/{unique-key}':
+    parameters:
+      - $ref: '#/components/parameters/unique-key'
+    get:
+      summary: Get an exception
+      tags:
+        - Exception
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+          content:
+            application/json:
+              schema:
+                $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Exception.yaml'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-exceptions-unique-key
+      x-stoplight:
+        id: 18lql0vdryjg1
+      description: Get an exception.
+      security:
+        - apikey: []
+    patch:
+      summary: Update an exception
+      tags:
+        - Exception
+      responses:
+        '200':
+          description: Updated
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: patch-exceptions-unique-key
+      x-stoplight:
+        id: 5xvp7xv58wpgc
+      description: "Update an exception.\r\n\r\nIf requester is included in the request body, operation upserts the stakeholder record.\r\n\r\nFor a design exception, link it to a version.\r\nFor an implementation exception, link it to a proxy."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Exception.yaml'
+                - allOf:
+                    - x-stoplight:
+                        id: 4ce603iulrkg0
+                      properties:
+                        requester:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml?deref=bundle'
+                        api:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml?deref=bundle'
+                    - x-stoplight:
+                        id: ftp06sbfqe50t
+                      oneOf:
+                        - properties:
+                            version:
+                              $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml?deref=bundle'
+                        - x-stoplight:
+                            id: 0x1stws8mogyp
+                          properties:
+                            proxy:
+                              $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml?deref=bundle'
+                  type: object
+  /notifications:
+    get:
+      description: "Retrieve a list of notifications, filtered to match any query parameters.\r\n\r\nCaller identity is determined from a validated ping token.\r\nQuery parameters was-read and was-dismissed are applied based on the caller identity.\r\n\r\nDefault behavior\r\n- Returns page 1 with max of 1000 items\r\n- Response includes the caller's readNotification child record fields: wasRead and wasDismiss\r\n- Sorted by postedOn desc"
+      summary: Get notification list
+      tags:
+        - Notification
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - schema:
+            type: string
+          in: header
+          name: x-ping-authorization
+          description: Ping IDP token for the caller
+          required: true
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: was-read
+          description: Whether a notification was read by the caller
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: was-dismissed
+          description: Whether a notification was dismissed by the caller
+        - schema:
+            type: string
+            format: date
+            example: '2025-11-28'
+          in: query
+          name: posted-before
+          description: Notification posting date. Matched to the specified date and before it.
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+            x-page:
+              $ref: '#/components/headers/x-page'
+            x-total-pages:
+              $ref: '#/components/headers/x-total-pages'
+            x-total-items:
+              $ref: '#/components/headers/x-total-items'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Notification.yaml'
+                  - type: object
+                    x-stoplight:
+                      id: 993fjyxr7kiti
+                    properties:
+                      wasRead:
+                        description: Whether or not this notification has be read by this stakeholder
+                        type: boolean
+                        x-stoplight:
+                          id: j8w2kpwjeoygk
+                        default: false
+                      wasDismissed:
+                        description: Whether or not this notification has be dismissed by this stakeholder
+                        type: boolean
+                        x-stoplight:
+                          id: exniyl14i235q
+                        default: false
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-notifications
+      x-stoplight:
+        id: w3rnk4xprj342
+    post:
+      summary: Create a notification
+      tags:
+        - Notification
+      responses:
+        '201':
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/location'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: post-notifications
+      x-stoplight:
+        id: fl7kev15dyghv
+      description: Create a notification related to API management.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Notification.yaml'
+  '/notifications/{id}':
+    parameters:
+      - schema:
+          type: string
+          example: '1234'
+        name: id
+        in: path
+        required: true
+        description: Notification record id
+    put:
+      summary: Replace a notification
+      tags:
+        - Notification
+      responses:
+        '200':
+          description: Replaced
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: put-notifications-id
+      x-stoplight:
+        id: nk9xx6jkh2yxy
+      description: Replace (upsert) a notification.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Notification.yaml'
+    delete:
+      summary: Delete a notification
+      tags:
+        - Notification
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-notifications-id
+      x-stoplight:
+        id: i521hhb91uavu
+      description: Transactionally delete a notification and all its linked read notifications.
+  /read-notifications:
+    put:
+      summary: Replace my read notification
+      tags:
+        - Notification
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: x-ping-authorization
+          description: Ping IDP token for the caller
+          required: true
+      responses:
+        '200':
+          description: Replaced
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: put-read-notifications
+      x-stoplight:
+        id: ikv343nlzl2y6
+      description: "Transactionally replace (upsert) a list of read notifications for the caller.\r\n\r\nCaller identity is determined from a validated ping token.\r\nThe referenced notification records must pre-exist."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Read%20Notification.yaml'
+  '/{seapim-org}/consumers':
+    parameters:
+      - $ref: '#/components/parameters/seapim-org'
+    get:
+      summary: Get consumer list for an organization
+      tags:
+        - Consumer
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - $ref: '#/components/parameters/fields'
+        - schema:
+            type: string
+          in: header
+          name: x-ping-authorization
+          description: Ping IDP token for the caller
+          required: true
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              enum:
+                - owner
+                - consumerProducts
+            example:
+              - consumerProducts
+          in: query
+          name: expands
+          description: Expand all fields of a named child resource
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+            example:
+              - '50600'
+          in: query
+          name: asset-id
+          description: Asset id for the application in the asset system
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+            example:
+              - SE API Management|ravi.joshi@se.com
+          in: query
+          name: seapim-name
+          description: Application name and developer email in the SEAPIM platform. Each element is a name|email pair.
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: is-decommissioned
+          description: Whether the application is decommissioned in SEAPIM. Filter is applied to the consumer and its child records.
+      responses:
+        '200':
+          description: Retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Consumer.yaml'
+                    - type: object
+                      properties:
+                        applicationAsset:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Application%20Asset.yaml'
+                        owner:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+                        consumerProducts:
+                          description: List of API manager products linked to this consumer
+                          type: array
+                          x-stoplight:
+                            id: imflhons1xwep
+                          items:
+                            x-stoplight:
+                              id: cosjzyc3ev6xk
+                            allOf:
+                              - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Consumer%20Product.yaml'
+                              - type: object
+                                x-stoplight:
+                                  id: n9uy4iikqfwuo
+                                properties:
+                                  product:
+                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product.yaml'
+              examples: {}
+          headers:
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+            x-page:
+              $ref: '#/components/headers/x-page'
+            x-total-pages:
+              $ref: '#/components/headers/x-total-pages'
+            x-total-items:
+              $ref: '#/components/headers/x-total-items'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-seapim-org-consumers
+      x-stoplight:
+        id: mqn24xrovfmi1
+      description: "Retrieve a list of consumer applications for a SEAPIM organization, filtered to match any query parameters.\r\n\r\nCaller identity is determined from a validated ping token.\r\n\r\nIf the caller is an admin, query param expand=consumerProducts will return a response which includes an obscured set of apikeys for each matched consumer.\r\n\r\nIf the caller is an app owner, query param expand=consumerProducts will return a response which includes an obscured set of apikeys for each matched consumer that they own, otherwise the apikeys field is omitted.\r\n\r\nIf the caller is any other role, matched consumerProducts are returned without apikeys\r\n\r\nDefault behaviors\r\n- Returns page 1 with max of 1000 items\r\n- Sorted by seapimAppName, seapimAppEmail\r\n- Leaf children expanded by default: applicationAsset"
+    delete:
+      summary: Hard delete all consumers for an organization
+      tags:
+        - Consumer
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-seapim-org-consumers
+      x-stoplight:
+        id: jcbwsw30wu0wt
+      description: "Transactionally delete all consumers and their consumerProducts.\r\nDelete linked applicationAssets that are not associated with proxyProviders.\r\nRemove app owner role from all stakeholders.\r\nCascade delete the product and its productProxies. The linked proxy is not deleted.\r\n\r\nNote that caches will retain copies of the affected resources until they become stale."
+  '/{seapim-org}/consumers/{unique-key}':
+    parameters:
+      - $ref: '#/components/parameters/seapim-org'
+      - $ref: '#/components/parameters/unique-key'
+    get:
+      summary: Get a consumer for an organization.
+      tags:
+        - Consumer
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Consumer.yaml'
+                  - type: object
+                    x-stoplight:
+                      id: kabuk34meywbl
+                    properties:
+                      applicationAsset:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Application%20Asset.yaml'
+                      owner:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+                      consumerProducts:
+                        description: List of API manager products linked to this consumer
+                        type: array
+                        x-stoplight:
+                          id: 683bri2ds68x2
+                        items:
+                          x-stoplight:
+                            id: ixq6iluyha4xg
+                          allOf:
+                            - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Consumer%20Product.yaml'
+                            - type: object
+                              x-stoplight:
+                                id: 6d41i37uuo4l2
+                              properties:
+                                product:
+                                  $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product.yaml'
+              examples: {}
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-seapim-org-consumers-unique-key
+      x-stoplight:
+        id: hoh44u720c9zx
+      description: Get a consumer application for an organization.
+    put:
+      summary: Replace a consumer for an organization
+      tags:
+        - Consumer
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+      responses:
+        '200':
+          description: Replaced
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: put-seapim-org-consumers-unique-key
+      x-stoplight:
+        id: lfcrmfhx97tcl
+      description: "Transactionally replace (upsert) a consumer for an organization.\r\n\r\nThis operation also upserts and links these child resources: applicationAsset, owner, consumerProducts\r\n\r\nThe product referenced in consumerProducts must pre-exist.\r\nThe owner is assigned the app owner role. If the ownership has changed, and the former owner owns no other consumer applications, their app owner role is removed.\r\n\r\nUse the if-match header to pass the consumer etag. If the consumer was not found, set it to \"none\"."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                allOf:
+                  - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Consumer.yaml'
+                  - type: object
+                    x-stoplight:
+                      id: bd3nxjz43765w
+                    properties:
+                      applicationAsset:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Application%20Asset.yaml'
+                      owner:
+                        $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+                      consumerProducts:
+                        description: List of API manager products linked to this consumer
+                        type: array
+                        x-stoplight:
+                          id: imflhons1xwep
+                        items:
+                          x-stoplight:
+                            id: cosjzyc3ev6xk
+                          allOf:
+                            - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Consumer%20Product.yaml'
+                            - type: object
+                              x-stoplight:
+                                id: n9uy4iikqfwuo
+                              properties:
+                                product:
+                                  $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product.yaml'
+            examples: {}
+    delete:
+      summary: Hard delete a consumer for an organization
+      tags:
+        - Consumer
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: delete-seapim-org-consumers-unique-key
+      x-stoplight:
+        id: 5p65ndjkephjp
+      description: "Transactionally delete the consumer and its consumerProducts.\r\nThe linked application asset is not deleted as it may be shared by a proxy provider.\r\n\r\nIf the owner owns no other consumer applications, their app owner role is removed.\r\nIf the consumer is the only application using an associated product, delete the product and its productProxies.\r\nThe linked proxy is not deleted.\r\n\r\nNote that caches will retain copies of the affected resources until they become stale."
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+  '/{seapim-org}/products':
+    parameters:
+      - $ref: '#/components/parameters/seapim-org'
+    get:
+      summary: Get product list or an organization
+      tags:
+        - Product
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+            x-page:
+              $ref: '#/components/headers/x-page'
+            x-total-pages:
+              $ref: '#/components/headers/x-total-pages'
+            x-total-items:
+              $ref: '#/components/headers/x-total-items'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product.yaml'
+                    - type: object
+                      x-stoplight:
+                        id: welgb96zv18uo
+                      properties:
+                        consumerProducts:
+                          description: List consumers linked to this API manager product
+                          type: array
+                          x-stoplight:
+                            id: yy1wtd2d1j941
+                          items:
+                            x-stoplight:
+                              id: 3bc5cljjv2okj
+                            allOf:
+                              - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Consumer%20Product.yaml'
+                              - type: object
+                                x-stoplight:
+                                  id: 4j58z96kmayrw
+                                properties:
+                                  consumer:
+                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Consumer.yaml'
+                        productProxies:
+                          description: List proxies bundled in this API manager product
+                          type: array
+                          x-stoplight:
+                            id: v32plpv1my4fd
+                          items:
+                            x-stoplight:
+                              id: elu1ig49kiul7
+                            allOf:
+                              - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product%20Proxy.yaml'
+                              - type: object
+                                x-stoplight:
+                                  id: ff7wwec6138ew
+                                properties:
+                                  proxy:
+                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-seapim-org-products
+      x-stoplight:
+        id: ep3pyb5mspwfv
+      description: "Retrieve a list of products for an organization, filtered to match any query parameters.\r\nProducts enable consumer API subscriptions.\r\n\r\nDefault behaviors\r\n- Returns page 1 with max of 1000 items\r\n- Sorted by productName\r\n\r\nCaller identity is determined from a validated ping token.\r\n\r\nIf the caller is an admin, query param expand=consumerProducts will return a response which includes an obscured set of apikeys for each matched consumer.\r\n\r\nIf the caller is an app owner, query param expand=consumerProducts will return a response which includes an obscured set of apikeys for each matched consumer that they own, otherwise the apikeys field is omitted.\r\n\r\nIf the caller is any other role, matched consumerProducts are returned without apikeys"
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - $ref: '#/components/parameters/fields'
+        - schema:
+            type: string
+          in: header
+          name: x-ping-authorization
+          description: Ping IDP token for the caller
+          required: true
+        - schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
+              enum:
+                - consumerProducts
+                - productProxies
+            example:
+              - consumerProducts
+          in: query
+          name: expands
+          description: Expand all fields of a named child resource
+        - schema:
+            type: string
+            example: Product-SE API Management
+          in: query
+          name: product-name
+          description: Product name in the SEAPIM platform
+        - schema:
+            type: string
+            example: a1256f9-af57-444e-b637-82f3d1e98087
+          in: query
+          name: seapim-appid
+          description: 'SEAPIM application id, matched to consumerProducts.consumer.seapimAppId'
+        - schema:
+            type: string
+            example: API-Catalog-V1
+          in: query
+          name: proxy-name
+          description: 'Proxy name, matched to productProxies.proxy.proxyName'
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: is-decommissioned
+          description: Whether the product is decommissioned in SEAPIM. Filter is applied to the product and its child records.
+  '/{seapim-org}/products/{unique-key}':
+    parameters:
+      - $ref: '#/components/parameters/seapim-org'
+      - $ref: '#/components/parameters/unique-key'
+    get:
+      summary: Get a product for an organization.
+      tags:
+        - Product
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            etag:
+              $ref: '#/components/headers/etag'
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+          content:
+            application/json:
+              schema:
+                $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product.yaml'
+              examples: {}
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-seapim-org-products-unique-key
+      x-stoplight:
+        id: 1ctofo5smsn40
+      description: Get a product for an organziation.
+    put:
+      summary: Replace a product for an organization
+      tags:
+        - Product
+      responses:
+        '200':
+          description: Replaced
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '412':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/412'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      parameters:
+        - $ref: '#/components/parameters/if-match'
+      operationId: put-seapim-org-products-product-name
+      x-stoplight:
+        id: dpj6qm568h4tw
+      description: "Transactionally replace (upsert) a product for an organization, and its productProxies.\r\n\r\nThe proxy referenced in productProxies must pre-exist.\r\nAny pre-existing productProxies that are omitted from the request body will be marked as decommissioned.\r\nOmit consumerProducts from the request. These associations are managed via a PUT operation on the consumer.\r\n\r\nUse the if-match header to pass the product etag. If the product was not found, set it to \"none\"."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product.yaml'
+                - type: object
+                  x-stoplight:
+                    id: hly9ng7tqoor6
+                  properties:
+                    productProxies:
+                      description: List proxies bundled in this API manager product
+                      type: array
+                      x-stoplight:
+                        id: 9kcm3prtj3k07
+                      items:
+                        x-stoplight:
+                          id: q7exaaiklwyho
+                        allOf:
+                          - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product%20Proxy.yaml'
+                          - type: object
+                            x-stoplight:
+                              id: rktwgh8h7k81e
+                            properties:
+                              proxy:
+                                $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+        description: Product including its consumers and productProxies.
+  '/{seapim-org}/proxies/{unique-key}/subscriptions':
+    parameters:
+      - $ref: '#/components/parameters/seapim-org'
+      - $ref: '#/components/parameters/unique-key'
+    get:
+      summary: Get proxy subscriptions for an organization
+      tags:
+        - Proxy
+        - Product
+      parameters:
+        - $ref: '#/components/parameters/cache-control'
+        - schema:
+            type: boolean
+            example: true
+          in: query
+          name: is-decommissioned
+          description: Whether the application is decommissioned in SEAPIM. Filter is applied to the consumer and its child records.
+      responses:
+        '200':
+          description: Retrieved
+          headers:
+            date:
+              $ref: '#/components/headers/date'
+            cache-control:
+              $ref: '#/components/headers/cache-control'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Consumer%20Product.yaml'
+                    - type: object
+                      x-stoplight:
+                        id: crva8n0xrhfpy
+                      properties:
+                        consumer:
+                          description: 'A subsribing consumer application, including its asset id and name'
+                          allOf:
+                            - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Consumer.yaml'
+                            - type: object
+                              x-stoplight:
+                                id: w1tju2efo54uq
+                              properties:
+                                applicationAsset:
+                                  $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Application%20Asset.yaml'
+                        product:
+                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Product.yaml'
+        '400':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/400'
+        '401':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/401'
+        '403':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/403'
+        '404':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/404'
+        '429':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/429'
+        '500':
+          $ref: 'https://stoplight.io/api/v1/projects/schneider/common-resources/nodes/common.oas3.yml#/components/responses/500'
+      operationId: get-seapim-org-proxies-unique-key-subscriptions
+      x-stoplight:
+        id: 1cgdf9xcbi0p1
+      description: "Retrieve a list of consumers subscribed to the proxy for an organisation.\r\n\r\nDefault behaviors\r\n- Sorted by consumer.seapimAppName\r\n\r\nThis operation reduces proxy:product:consumer 1:N:M associations, modelled via productProxies.product.consumerProducts, into a 1:M association with no duplicated consumers.\r\nSubscription details such as callrate and scopes are taken from the linking product that has the highest callrate.\r\nThe response does not include apikeys."
+components:
+  responses: {}
+  securitySchemes:
+    apikey:
+      name: SEAPIM API Key
+      type: apiKey
+      in: header
+      description: 'Usable together with a ping token only if the calling application has been verified to be a single page app (browser-based). For other app types, an oauth2 token must be passed.'
+    x-ping-authorization:
+      name: Ping IDP Token
+      type: apiKey
+      in: header
+      description: Required if apikey is provided or if it is documented as required for a specific operation.
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: 'https://api.qa.se.com/token'
+          refreshUrl: 'https://api.qa.se.com/token'
+          scopes:
+            '*:read': 'All resources, read-only access'
+            '*:write': 'All resources, create, update read access'
+            '*:full': 'All resources, create, update, read and delete access'
+            'consumers:full': 'Consumer resources, create, update, read and delete access'
+            'products:full': 'Product resources, create, update, read and delete access'
+            'certifications:full': 'Certification resources, create, update, read and delete access'
+      description: 'SEAPIM OAuth2 token, valid for 1 hour.'
+  parameters:
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        example: 2
+        minimum: 1
+        default: 1
+      description: Page number of a result set to retrieve. Integer value or "all" to request  all pages.
+    size:
+      name: size
+      in: query
+      required: false
+      schema:
+        type: integer
+        example: 15
+        default: 1000
+      description: Number of items to return for a given page.
+    fields:
+      name: fields
+      in: query
+      required: false
+      schema:
+        type: array
+        minItems: 1
+        items:
+          type: string
+      description: 'Include only named fields in the response, but include any required fields implicitly.'
+    unique-key:
+      name: unique-key
+      in: path
+      required: true
+      schema:
+        type: string
+      description: A unique string or a number identifier for a specific resource
+    version-unique-key:
+      name: version-unique-key
+      in: path
+      required: true
+      schema:
+        type: string
+        example: api-catalog|1.0
+      description: A unique string or a number identifier for a specific version. String identifier format is name|version.
+    seapim-org:
+      name: seapim-org
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - seapim_non_prod
+          - seapim_pre_prod
+          - seapim_prod
+        example: seapim_prod
+      description: A SEAPIM platform organisation name
+    if-match:
+      name: if-match
+      in: header
+      schema:
+        type: string
+        example: W/"2272-8MWxicxxxxxxxx"
+      description: etag value matching the last known state of this resource (not expanded). May be set to "none" when passed to a PUT and existing resource was not found.
+      required: true
+    cache-control:
+      name: cache-control
+      in: header
+      required: false
+      schema:
+        type: string
+        example: no-cache
+      description: 'List of standard cache control directives. Supported subset: no-cache, no-store, max-age.'
+  schemas: {}
+  headers:
+    location:
+      description: The location where to GET the newly created/replaced record
+      schema:
+        type: string
+        format: uri-reference
+        example: /resource/12
+    etag:
+      description: 'etag, a value associated with the current resource state'
+      schema:
+        type: string
+        example: W/"2272-8MWxicxxxxxxxx"
+    date:
+      description: Date and time when the response was sent
+      schema:
+        type: string
+        example: 'Wed, 12 Nov 2025 18:06:03 GMT'
+    cache-control:
+      description: 'List of standard cache control directives. max-age:number of seconds, indicates max time when response is considered fresh. must-revalidate requires caches to request a fresh copy after the max-age period has passed'
+      schema:
+        type: string
+        example: 'max-age:3599, must-revalidate'
+    x-page:
+      description: Current page number
+      schema:
+        type: integer
+        example: 1
+    x-total-pages:
+      description: Total number of pages
+      schema:
+        type: integer
+        example: 1
+    x-total-items:
+      description: Total number of queried items
+      schema:
+        type: integer
+        example: 1000
+servers:
+  - url: 'https://api.qa.se.com/v1/it/api-catalog'
+    description: QA
+security:
+  - apikey: []
+    x-ping-authorization: []
+  - x-ping-authorization: []
+  - oauth2:
+      - '*:read'
+      - '*:full'
+      - '*:write'
+      - 'consumers:full'
+      - 'products:full'
+      - 'certifications:full'
+tags:
+  - name: API
+  - name: Exception
+  - name: Proxy
+  - name: Reference
+  - name: Stakeholder
+  - name: Version
+  - name: Notification
+  - name: Consumer
+  - name: Product
+x-default-scope:
+  - '*:read'
