@@ -25,38 +25,23 @@ paths:
                 type: array
                 items:
                   allOf:
-                    - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/API.yaml'
+                    - $ref: 'stoplight://resources/overrides/cIwpBGCGUAk'
                     - type: object
                       x-stoplight:
                         id: 8wxyqryvhgrdw
                       properties:
                         score:
-                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Score.yaml'
+                          $ref: 'stoplight://resources/overrides/oXDsNPatQc4'
                         capabilities:
-                          description: 'List of business capabilities which the API is designed to support. They must all have the same parent business area, as defined within the SE Asset Management system'
-                          x-stoplight:
-                            id: k0l3woxhhvsjs
-                          type: array
-                          items:
-                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Capability.yaml'
+                          $ref: 'stoplight://resources/overrides/GWLlMFVIRto'
                         futureGoals:
-                          description: List of future goals related to the intended evolution of this API
-                          type: array
-                          x-stoplight:
-                            id: t0s14iy4tga9v
-                          items:
-                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Future%20Goal.yaml'
+                          $ref: 'stoplight://resources/overrides/PByfdvKa7SE'
                         kpis:
-                          description: List of KPIs (Key Process Indicators) related this API
-                          type: array
-                          x-stoplight:
-                            id: 5kpfkypkaegs5
-                          items:
-                            $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/KPI.yaml'
+                          $ref: 'stoplight://resources/overrides/x3f0y6KsZvY'
                         apiOwner:
-                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+                          $ref: 'stoplight://resources/overrides/cIwpBGCGUAk'
                         latestProxy:
-                          $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                          $ref: 'stoplight://resources/overrides/afpd4yOxEWY'
                         proxies:
                           description: List of proxies for this API. Each proxy is associated with a major version
                           type: array
@@ -73,13 +58,13 @@ paths:
                             x-stoplight:
                               id: eru6lcmzayjwm
                             allOf:
-                              - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Rating.yaml'
+                              - $ref: 'stoplight://resources/overrides/0fhBmhInvsM'
                               - type: object
                                 x-stoplight:
                                   id: a3wrgc8ih3pm4
                                 properties:
                                   rater:
-                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Stakeholder.yaml'
+                                    $ref: 'stoplight://resources/overrides/0fhBmhInvsM'
                         exceptions:
                           description: List of exceptions for this API raised due to deviations from the SE API design standards
                           type: array
@@ -89,15 +74,15 @@ paths:
                             x-stoplight:
                               id: 5bfcakmir24uo
                             allOf:
-                              - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Exception.yaml'
+                              - $ref: 'stoplight://resources/overrides/NEJkoKSdBKE'
                               - type: object
                                 x-stoplight:
                                   id: sh303gj934x9l
                                 properties:
                                   proxy:
-                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Proxy.yaml'
+                                    $ref: 'stoplight://resources/overrides/afpd4yOxEWY'
                                   version:
-                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+                                    $ref: 'stoplight://resources/overrides/VtKmHt5Mgiw'
                         certifications:
                           description: List of completed certification records for this API
                           type: array
@@ -107,13 +92,13 @@ paths:
                             x-stoplight:
                               id: vbh96xurez9n2
                             allOf:
-                              - $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Certification.yaml'
+                              - $ref: 'stoplight://resources/overrides/7qoORJkOUNY'
                               - type: object
                                 x-stoplight:
                                   id: nqh9rn3p79xeq
                                 properties:
                                   version:
-                                    $ref: 'https://stoplight.io/api/v1/projects/schneider/api-catalog-design-library/nodes/schemas/Version.yaml'
+                                    $ref: 'stoplight://resources/overrides/VtKmHt5Mgiw'
               examples: {}
           headers:
             date:
